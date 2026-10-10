@@ -1,0 +1,21 @@
+{
+  "name": "mongo-sink-market-data",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "tasks.max": "1",
+    "topics": "gdelt.events.v1",
+    "connection.uri": "mongodb://mongodb:27017/?replicaSet=rs0",
+    "database": "market_data",
+    "topic.override.gdelt.events.v1.collection": "events",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.ProvidedInValueStrategy",
+    "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.UpdateOneTimestampsStrategy",
+    "max.batch.size": "200",
+    "rate.limiting.timeout": "50",
+    "errors.tolerance": "all",
+    "errors.deadletterqueue.topic.name": "gdelt.dlq.v1",
+    "errors.deadletterqueue.topic.replication.factor": "1"
+  }
+}
