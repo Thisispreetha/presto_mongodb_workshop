@@ -13,9 +13,12 @@ import urllib.request
 from datetime import datetime, timezone
 from pyspark.sql import SparkSession
 
+
 def main(spark=None):
+    start_time = datetime.now(timezone.utc)
     print("=" * 70)
     print("  GDELT LAKEHOUSE DATA QUALITY & AUDIT SUITE")
+    print(f"  Started: {start_time.isoformat()}")
     print("=" * 70)
 
     if spark is None:
@@ -186,7 +189,11 @@ def main(spark=None):
         print(f"  [FAIL] Presto federated view audit failed: {presto_err}")
         failures += 1
 
+    end_time = datetime.now(timezone.utc)
+    duration_sec = (end_time - start_time).total_seconds()
     print("\n" + "=" * 70)
+    print(f"  Audit Duration: {duration_sec:.2f} seconds")
+    print(f"  Completed: {end_time.isoformat()}")
     if failures == 0:
         print("  ALL GDELT DATA QUALITY AUDITS PASSED SUCCESSFULLY!")
     else:
@@ -195,6 +202,7 @@ def main(spark=None):
 
     if failures > 0:
         sys.exit(1)
+
 
 if __name__ == "__main__":
     spark = SparkSession.builder \
